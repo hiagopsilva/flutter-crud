@@ -74,10 +74,21 @@ class Users with ChangeNotifier {
     notifyListeners();
   }
 
-  void remove(User user) {
+  void remove(User user) async {
     if (user != null && user.id != null) {
-      _items.remove(user.id);
-      notifyListeners();
+      final response = await http.delete(
+        Uri.parse("$_baseUrl/users/${user.id}.json"),
+        body: json.encode({
+          'name': user.name,
+          'email': user.email,
+          'avatarUrl': user.avatarUrl,
+        }),
+      );
+
+      if (response.body.isNotEmpty) {
+        _items.remove(user.id);
+        notifyListeners();
+      }
     }
   }
 }
