@@ -1,4 +1,7 @@
+import 'package:crud_flutter/models/user.dart';
+import 'package:crud_flutter/provider/users.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserForm extends StatelessWidget {
   final _form = GlobalKey<FormState>();
@@ -17,6 +20,15 @@ class UserForm extends StatelessWidget {
 
               if (isValid) {
                 _form.currentState.save();
+                Provider.of<Users>(context, listen: false).put(
+                  User(
+                    id: _formData['id'],
+                    name: _formData['name'],
+                    email: _formData['email'],
+                    avatarUrl: _formData['avatarUrl'],
+                  ),
+                );
+
                 Navigator.of(context).pop();
               }
             },
