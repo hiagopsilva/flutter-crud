@@ -24,17 +24,31 @@ class Users with ChangeNotifier {
       return;
     }
 
-    final id = Random().nextDouble().toString();
+    if (user.id != null &&
+        user.id.trim().isNotEmpty &&
+        _items.containsKey(user.id)) {
+      _items.update(
+        user.id,
+        (_) => User(
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          avatarUrl: user.avatarUrl,
+        ),
+      );
+    } else {
+      final id = Random().nextDouble().toString();
 
-    _items.putIfAbsent(
-      id,
-      () => User(
-        id: id,
-        name: user.name,
-        email: user.email,
-        avatarUrl: user.avatarUrl,
-      ),
-    );
+      _items.putIfAbsent(
+        id,
+        () => User(
+          id: id,
+          name: user.name,
+          email: user.email,
+          avatarUrl: user.avatarUrl,
+        ),
+      );
+    }
 
     notifyListeners();
   }
