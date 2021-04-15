@@ -13,8 +13,12 @@ class UserForm extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
-              _form.currentState.save();
-              Navigator.of(context).pop();
+              final isValid = _form.currentState.validate();
+
+              if (isValid) {
+                _form.currentState.save();
+                Navigator.of(context).pop();
+              }
             },
           )
         ],
@@ -27,10 +31,24 @@ class UserForm extends StatelessWidget {
               children: <Widget>[
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Nome'),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Nome inválido';
+                    }
+
+                    return null;
+                  },
                   onSaved: (value) => _formData['name'] = value,
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Email'),
+                  validator: (value) {
+                    if (value.trim().length < 3) {
+                      return 'Email inválido';
+                    }
+
+                    return null;
+                  },
                   onSaved: (value) => _formData['email'] = value,
                 ),
                 TextFormField(
