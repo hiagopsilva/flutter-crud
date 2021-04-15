@@ -38,12 +38,13 @@ class _UserFormState extends State<UserForm> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () {
+            onPressed: () async {
               final isValid = _form.currentState.validate();
 
               if (isValid) {
                 _form.currentState.save();
-                Provider.of<Users>(context, listen: false).put(
+
+                await Provider.of<Users>(context, listen: false).put(
                   User(
                     id: _formData['id'],
                     name: _formData['name'],
@@ -91,7 +92,23 @@ class _UserFormState extends State<UserForm> {
                 TextFormField(
                   initialValue: _formData['avatarUrl'],
                   decoration: InputDecoration(labelText: 'URL do avatar'),
-                  onSaved: (value) => _formData['avatarUrl'] = value,
+                  onSaved: (value) => {
+                    if (value == 'pinguim')
+                      {
+                        value =
+                            'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295429_960_720.png',
+                      },
+                    _formData['avatarUrl'] = value,
+                  },
+                ),
+                Container(
+                  margin:
+                      const EdgeInsets.only(left: 0, right: 65.0, top: 10.0),
+                  child: Text(
+                    'Está sem avatar? Escreva "pinguim" na URL do avatar.',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(color: Colors.blueGrey[400]),
+                  ),
                 )
               ],
             )),
